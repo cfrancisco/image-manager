@@ -14,7 +14,6 @@ db = SQLAlchemy(app)
 
 minioClient = Minio(CONFIG.s3url, CONFIG.s3user, CONFIG.s3pass, secure=False)
 
-
 class Image(db.Model):
     __tablename__ = 'images'
 
@@ -22,12 +21,19 @@ class Image(db.Model):
     label = db.Column(db.String(128), nullable=False)
     created = db.Column(db.DateTime, default=datetime.now)
     updated = db.Column(db.DateTime, onupdate=datetime.now)
-
     fw_version = db.Column(db.String(128), nullable=False)
     confirmed = db.Column(db.Boolean, default=False, nullable=False)
-
+    attrs = db.relationship("Attributes", cascade='all, delete-orphan')
     def __repr__(self):
         return "<Image(label={}, fw_version={})>".format(self.label, self.fw_version)
+
+class Attributes(db.Model):
+    __tablename__ = 'attributes'
+    
+    id = db.Column(db.String(36), unique=True, nullable=False, primary_key=True)
+    label = db.Column(db.String(128), nullable=False)
+    value = db.Column(db.String(128), nullable=True)
+    image_id = db.Column(db.String(36), db.ForeignKey('images.id'))
 
 
 def assert_image_exists(image_id):

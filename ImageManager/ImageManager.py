@@ -131,11 +131,23 @@ def create_image():
     """ Creates and configures the given image (in json) """
     try:
         tenant = init_tenant_context(request, db, minioClient)
-        image_data, json_payload = parse_json_payload(request, image_schema)
+        image_data_aux, json_payload = parse_json_payload(request, image_schema)
         imageid = str(uuid.uuid4())
+        image_data = dict()
+
+        image_data['label'] = image_data_aux['label']
+        image_data['fw_version'] = image_data_aux['fw_version']
         image_data['id'] = imageid
 
+        only_attrs = []
+        if 'attrs' in image_data_aux:
+            only_attrs = image_data_aux['attrs']
+
         orm_image = Image(**image_data)
+
+        for one_attr in only_attrs:
+            one_attr['id'] = str(uuid.uuid4())
+            orm_image.attrs.append(Attributes(**one_attr))
         db.session.add(orm_image)
 
         try:

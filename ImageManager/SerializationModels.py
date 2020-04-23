@@ -9,15 +9,24 @@ LOGGER = logging.getLogger('image-manager.' + __name__)
 LOGGER.addHandler(logging.StreamHandler())
 LOGGER.setLevel(logging.DEBUG)
 
+class AttributesSchema(Schema):
+    id = fields.String(dump_only=True)
+    label = fields.String(required=True)
+    value = fields.String(required=False)
+
+    @post_dump
+    def remove_null_values(self, data):
+        return {key: value for key, value in data.items() if value is not None}
+
 
 class ImageSchema(Schema):
     id = fields.String(dump_only=True)
-    label = fields.Str(required=True)
+    label = fields.String(required=True)
     created = fields.DateTime(dump_only=True)
     updated = fields.DateTime(dump_only=True)
-
     fw_version = fields.String(required=True)
     confirmed = fields.Bool(required=False)
+    attrs = fields.Nested(AttributesSchema, many=True)
 
     @post_dump
     def remove_null_values(self, data):
@@ -68,9 +77,7 @@ def parse_json_payload(request, schema):
         raise HTTPRequestError(400, "Payload must be valid JSON, and Content-Type set accordingly")
 
     try:
-        print(json_payload)
         data = schema.load(json_payload)
-        print(data)
     except ValidationError as error:
         results = {'message': 'failed to parse input', 'errors': error.messages}
         raise HTTPRequestError(400, results)
