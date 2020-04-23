@@ -28,6 +28,7 @@ Simple CRUD service for storing firmware image metadata and binaries
                   {
                     "created": "2018-02-08T12:25:11.979313+00:00",
                     "confirmed": true,
+                    "attrs": [], 
                     "label": "ExampleFW",
                     "fw_version": "1.0.0-rc1",
                     "id": "b60aa5e9-cbe6-4b51-b76c-08cf8273db07"
@@ -35,6 +36,7 @@ Simple CRUD service for storing firmware image metadata and binaries
                   {
                     "created": "2018-02-08T12:25:11.998107+00:00",
                     "confirmed": false,
+                    "attrs": [], 
                     "label": "ExampleFW",
                     "fw_version": "1.0.0-rc1",
                     "id": "51b39543-9de1-4751-9fe2-48c8d6038ba1"
@@ -42,6 +44,13 @@ Simple CRUD service for storing firmware image metadata and binaries
                   {
                     "confirmed": false,
                     "created": "2018-02-22T21:30:39.740576+00:00",
+                    "attrs": [
+                      {
+                        "id": "bcd29685-7f4e-470f-8666-e4e83e3d98ac", 
+                        "label": "attr", 
+                        "value": "attr_value"
+                      }
+                    ], 
                     "fw_version": "1.0.0-rc1",
                     "id": "c929e347-0cd3-4925-a9ed-44ec59f7a1b9",
                     "label": "ExampleFW"
@@ -80,7 +89,11 @@ All fields are required, images with missing metadata fields will return an erro
 
             {
                 "label": "FW_Example",
-                "fw_version": "1.0.0"
+                "fw_version": "1.0.0",
+                "attrs": [
+                  {"label": "mandatory","value": "true"},
+                  {"label": "description","value": "description"}
+                ]
             }
 
 

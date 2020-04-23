@@ -22,3 +22,16 @@ On terminal #2:
     
     cd tests/
     python3 client.py
+
+
+
+Request samples using authorization token as {"service": "mytenant"}:
+
+    curl http://localhost:8000/image -H "Accept: application/json" -H "Authorization: Bearer my.eyJzZXJ2aWNlIjogIm15dGVuYW50In0="
+
+
+    curl -X POST http://localhost:8000/image/ -H "Accept: application/json" -H "Authorization: Bearer my.eyJzZXJ2aWNlIjogIm15dGVuYW50In0=" -H "Content-Type: application/json"  -d '{"label": "FW_Example","fw_version": "1.0.0", "attrs": [{"label": "mandatory","value": "true"},{"label": "description","value": "description"}]}'
+
+
+    curl -X DELETE http://localhost:8000/image/<image_id> -H "Accept: application/json" -H "Authorization: Bearer my.eyJzZXJ2aWNlIjogIm15dGVuYW50In0="
+ 
